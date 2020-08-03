@@ -31,7 +31,7 @@ $ sudo bash install.sh
 ```
 #### Using PiAPI in other languages
 
-There is currently only one library available for C#. You can view that project [here](https://github.com/Bolillo-Kremer/PiAPI-C-Sharp) or download the nuget package in visual studio using the following command in the package manager terminal.
+There is currently only one library available for .Net languages. You can view that project [here](https://github.com/Bolillo-Kremer/PiAPI-C-Sharp) or download the nuget package in visual studio using the following command in the package manager terminal.
 ```
 PM Install-Package PiAPI
 ```
