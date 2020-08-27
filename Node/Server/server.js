@@ -187,7 +187,7 @@ app.post('/SetState', (req, res) => {
 })
 
 /**
- * Impots a given pin
+ * Imports a given pin
  */
 app.post('/InitPin', (req, res) => {
     req.on('data', (data) => {
