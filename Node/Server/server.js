@@ -49,7 +49,7 @@ app.post('/SetSetting', (req, res) => {
                     res.send('Settings updated');
                 }
                 else {
-                    res.send(`Setting name ${data.setting}`)
+                    res.send(`Setting name ${data.setting} does not exist`)
                 }
             }
             else {
@@ -120,6 +120,7 @@ app.post('/SetState', (req, res) => {
 	console.log(data);
 	try {
         if (isJSON(data)) {
+            data = JSON.parse(data)
             if (data.pin == '*') {
                 let pins = Object.keys(ios);
                 let successStates = {};
@@ -191,16 +192,16 @@ app.post('/SetState', (req, res) => {
 app.post('/InitPin', (req, res) => {
     req.on('data', (data) => {
         data = data.toString('ascii');
-	console.log(data);
+	    console.log(data);
         try {
             if (isJSON(data)) {
                 data = JSON.parse(data);
                 ios[data.pin] = 
                 {
-                    pin: new gpio(Number(data.pin), data.direction, data.edge, JSON.parse(data.options)),
+                    pin: new gpio(Number(data.pin), data.direction, data.edge, data.options),
                     direction: data.direction,
                     edge: data.edge,
-                    options: JSON.parse(data.options)
+                    options: data.options
                 }
                 res.send(ios[data.pin].pin.readSync().toString());
             }

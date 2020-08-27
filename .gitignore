@@ -40,6 +40,8 @@ build/Release
 # Dependency directories
 node_modules/
 jspm_packages/
+venv/ 
+.vscode/
 
 # Snowpack dependency directory (https://snowpack.dev/)
 web_modules/
@@ -118,5 +120,4 @@ dist
 #API Generated
 GPIO.json
 package-lock.json
-Settings.json
 desktop.ini
