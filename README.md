@@ -2,7 +2,7 @@
 ##### [Bolillo Kremer](https://youtube.com/BolilloKremer?https://www.youtube.com/BolilloKremer?sub_confirmation=1)
 
 ## Overview
-PiAPI is a user friendly web server that runs on Python or [Node.js] (https://nodejs.org) that allows you to interface with your raspberry pi's gpio pins from anywhere using virtually any language! This can be extremely useful to developers in many situations, but due to this application running off of a web server, using this application for percise timing may be an issue for some users.
+PiAPI is a user friendly web server that runs on Python or [Node.js](https://nodejs.org) that allows you to interface with your raspberry pi's gpio pins from anywhere using virtually any language! This can be extremely useful to developers in many situations, but due to this application running off of a web server, using this application for percise timing may be an issue for some users.
 
 For updates on this project and other other entertainging coding projects, please subscribe to my YouTube channel, [Bolillo Kremer](https://youtube.com/BolilloKremer?https://www.youtube.com/BolilloKremer?sub_confirmation=1). 
 
