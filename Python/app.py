@@ -1,24 +1,25 @@
 import json
 import os
 import sys
-#import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 from flask import Flask, jsonify, request
 from flask_cors import CORS, cross_origin
 from flask_restful import Resource, Api
 
-# #Setting Up
-# setDirections = {"in": GPIO.IN, "out": GPIO.OUT}
-# stateFunctions = {"in": GPIO.input, "out": GPIO.output}
-# gpioStates = {0: GPIO.LOW, 1: GPIO.HIGH}
-# pull = {"up": GPIO.PUD_UP, "down": GPIO.PUD_DOWN}
-# edge = {"rising": GPIO.RISING, "falling": GPIO.FALLING, "both": GPIO.BOTH }
-# boardTypes = {"bcm": GPIO.BCM, "board": GPIO.BOARD}
+#Setting Up
+setDirections = {"in": GPIO.IN, "out": GPIO.OUT}
+stateFunctions = {"in": GPIO.input, "out": GPIO.output}
+gpioStates = {0: GPIO.LOW, 1: GPIO.HIGH}
+pull = {"up": GPIO.PUD_UP, "down": GPIO.PUD_DOWN}
+edge = {"rising": GPIO.RISING, "falling": GPIO.FALLING, "both": GPIO.BOTH }
+boardTypes = {"bcm": GPIO.BCM, "board": GPIO.BOARD}
 
 settings = json.load(open("Settings.json"))
 port = int(settings["port"])
+host = settings["host"]
 ios = {}
 
-#GPIO.setmode(boardTypes[settings["mode"]])
+GPIO.setmode(boardTypes[settings["mode"]])
 
 
 #Creates Server
@@ -85,14 +86,14 @@ class InitPin(Resource):
             if "state" in data:
                 ios[data["pin"]]["state"] = gpioStates[data["state"]]
             else:
-                ios[data["pin"]]["state"] = None
+                ios[data["pin"]]["state"] = gpioStates[0]
             
             GPIO.setup(data["pin"], setDirections[data["direction"]], pull_up_down = ios[data["pin"]]["pull"], initial=ios[data["pin"]]["state"])
 
             if "edge" in data:
                 GPIO.wait_for_edge(data["pin"], edge[data["edge"]], timeout = ios[data["pin"]]["edgeTimeout"])
 
-            return "Initiated pin " + data["pin"]
+            return "Initiated pin " + str(data["pin"])
 
         except Exception as e:
             return "Error: " + str(e)
@@ -208,4 +209,4 @@ class Command(Resource):
 api.add_resource(Command, '/Command')
             
 if __name__ == "__main__":
-    app.run(debug=settings["debug"], port=port)
+    app.run(debug=settings["debug"], port=port, host=host)
