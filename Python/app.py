@@ -1,23 +1,24 @@
 import json
+import os
 import sys
-import RPi.GPIO as GPIO
+#import RPi.GPIO as GPIO
 from flask import Flask, jsonify, request
 from flask_cors import CORS, cross_origin
 from flask_restful import Resource, Api
 
-#Setting Up
-setDirections = {"in": GPIO.IN, "out": GPIO.OUT}
-stateFunctions = {"in": GPIO.input, "out": GPIO.output}
-gpioStates = {0: GPIO.LOW, 1: GPIO.HIGH}
-pull = {"up": GPIO.PUD_UP, "down": GPIO.PUD_DOWN}
-edge = {"rising": GPIO.RISING, "falling": GPIO.FALLING, "both": GPIO.BOTH }
-boardTypes = {"bcm": GPIO.BCM, "board": GPIO.BOARD}
+# #Setting Up
+# setDirections = {"in": GPIO.IN, "out": GPIO.OUT}
+# stateFunctions = {"in": GPIO.input, "out": GPIO.output}
+# gpioStates = {0: GPIO.LOW, 1: GPIO.HIGH}
+# pull = {"up": GPIO.PUD_UP, "down": GPIO.PUD_DOWN}
+# edge = {"rising": GPIO.RISING, "falling": GPIO.FALLING, "both": GPIO.BOTH }
+# boardTypes = {"bcm": GPIO.BCM, "board": GPIO.BOARD}
 
 settings = json.load(open("Settings.json"))
 port = int(settings["port"])
 ios = {}
 
-GPIO.setmode(boardTypes[settings["mode"]])
+#GPIO.setmode(boardTypes[settings["mode"]])
 
 
 #Creates Server
@@ -54,6 +55,7 @@ class SetSetting(Resource):
             return "Error: " + str(e)
 api.add_resource(SetSetting, '/SetSetting')
 
+#Imports a given pin
 class InitPin(Resource):
     def post(self):
         data = request.get_data(as_text=True)
@@ -96,6 +98,7 @@ class InitPin(Resource):
             return "Error: " + str(e)
 api.add_resource(InitPin, '/InitPin')
 
+#Returns the state of a given pin. If given "*", returns JSON of all pin states
 class GetState(Resource):
     def post(self):
         pin = request.get_data(as_text=True)
@@ -116,6 +119,7 @@ class GetState(Resource):
             return "Error: " + str(e)
 api.add_resource(GetState, '/GetState')
 
+#Returns a JSON of all active pins
 class ActivePins(Resource):
     def get(self):
         try:
@@ -131,6 +135,7 @@ class ActivePins(Resource):
             return "Error: " + str(e)
 api.add_resource(ActivePins, '/ActivePins')
 
+#Sets the state of a given pin. If given "*" sets the state of all pins
 class SetState(Resource):
     def post(self):
         data = request.get_data(as_text=True)
@@ -172,7 +177,7 @@ class SetState(Resource):
             return "Error: " + str(e)
 api.add_resource(SetState, '/SetState')
 
-
+#Unexports all pins
 class CleanExit(Resource):
     def get(self):
         try:
@@ -184,18 +189,23 @@ class CleanExit(Resource):
             "Error: " + str(e)
 api.add_resource(CleanExit, '/CleanExit')
 
+#Unexports a given pin
 class Unexport(Resource):
     def get(self):
         return "This function is currenty unavailable for the Python API. Please consider switching to the Node API"
 api.add_resource(Unexport, '/Unexport')
 
-
-
-
-
-
-
-
-
+#Executes a given terminal command
+class Command(Resource):
+    def post(self):
+        data = request.get_data(as_text=True)
+        print(data)
+        try:
+            command = os.system(data)
+            return command
+        except Exception as e:
+            return "Error: " + str(e)
+api.add_resource(Command, '/Command')
+            
 if __name__ == "__main__":
     app.run(debug=settings["debug"], port=port)
