@@ -18,7 +18,7 @@ For updates on this project and other other entertainging coding projects, pleas
 
 ## How to use
 #### Installing PiAPI on your Raspberry Pi
-In your raspberry pi terminal, download the install script for the API version that you want to run.
+In your raspberry pi terminal, simply run the install script for the API version that you want!
 If [cURL](https://curl.haxx.se/) is already installed, you can skip the first command.
 
 Install cURL
@@ -36,14 +36,6 @@ Python API
 $ bash <(curl -s https://raw.githubusercontent.com/Bolillo-Kremer/PiAPI/master/Python/install.sh)
 ```
 
-Next, make this script executable with this command
-```sh
-$ sudo chmod +x install.sh
-```
-Finally, run the install script with this command
-```sh
-$ sudo bash install.sh
-```
 #### Using PiAPI in other languages
 
 There is currently only one library available for .Net languages. You can view that project [here](https://github.com/Bolillo-Kremer/PiAPI.NET) or download the nuget package in visual studio using the following command in the package manager terminal.
