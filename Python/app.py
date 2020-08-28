@@ -11,7 +11,7 @@ from flask_restful import Resource, Api
 setDirections = {"in": GPIO.IN, "out": GPIO.OUT}
 stateFunctions = {"in": GPIO.input, "out": GPIO.output}
 gpioStates = {0: GPIO.LOW, 1: GPIO.HIGH}
-pull = {"up": GPIO.PUD_UP, "down": GPIO.PUD_DOWN}
+pull = {"up": GPIO.PUD_UP, "down": GPIO.PUD_DOWN, "none": GPIO.PUD_OFF}
 edge = {"rising": GPIO.RISING, "falling": GPIO.FALLING, "both": GPIO.BOTH }
 boardTypes = {"bcm": GPIO.BCM, "board": GPIO.BOARD}
 
@@ -36,7 +36,10 @@ class GetSetting(Resource):
         try:
             return settings[setting]
         except Exception as e:
-            return "Error: " + str(e)
+            error = {}
+            error["message"] = str(e)
+            error["stack"] = "".join(traceback.format_exception(sys.exc_info()[0], sys.exc_info()[1], sys.exc_info()[2]))         
+            return error
 api.add_resource(GetSetting, '/GetSetting')
     
 
@@ -54,7 +57,10 @@ class SetSetting(Resource):
             else:
                 return "Setting name " + data["setting"] + "does not exist"
         except Exception as e:
-            return "Error: " + str(e)
+            error = {}
+            error["message"] = str(e)
+            error["stack"] = "".join(traceback.format_exception(sys.exc_info()[0], sys.exc_info()[1], sys.exc_info()[2]))         
+            return error
 api.add_resource(SetSetting, '/SetSetting')
 
 #Imports a given pin
@@ -82,14 +88,14 @@ class InitPin(Resource):
             if "pull" in data:
                 ios[pin]["pull"] = pull[data["pull"]]
             else:
-                ios[pin]["pull"] = None   
+                ios[pin]["pull"] = pull[data["none"]] 
 
             if "state" in data:
                 ios[pin]["state"] = gpioStates[int(data["state"])]
             else:
                 ios[pin]["state"] = gpioStates[0]
             
-            GPIO.setup(pin, ios[pin]["direction"], initial=ios[pin]["state"])
+            GPIO.setup(pin, ios[pin]["direction"], pull_up_down =ios[pin]["pull"], initial=ios[pin]["state"])
 
             if "edge" in data:
                 GPIO.wait_for_edge(pin, edge[data["edge"]], timeout = ios[pin]["edgeTimeout"])
@@ -98,8 +104,8 @@ class InitPin(Resource):
 
         except Exception as e:
             error = {}
-            error["stack"] = "".join(traceback.format_exception(sys.exc_info()[0], sys.exc_info()[1], sys.exc_info()[2]))
             error["message"] = str(e)
+            error["stack"] = "".join(traceback.format_exception(sys.exc_info()[0], sys.exc_info()[1], sys.exc_info()[2]))         
             return error
 api.add_resource(InitPin, '/InitPin')
 
@@ -116,12 +122,15 @@ class GetState(Resource):
                     states[iopin] = ios[iopin]["state"]
                 return iopin
             else:
-                if (pin in ios):
-                    return ios[pin]["state"]
+                if (int(pin) in ios):
+                    return ios[int(pin)]["state"]
                 else:
                     return "Error: Pin " + pin + " not initialized"
         except Exception as e:
-            return "Error: " + str(e)
+            error = {}
+            error["message"] = str(e)
+            error["stack"] = "".join(traceback.format_exception(sys.exc_info()[0], sys.exc_info()[1], sys.exc_info()[2]))         
+            return error
 api.add_resource(GetState, '/GetState')
 
 #Returns a JSON of all active pins
@@ -137,7 +146,10 @@ class ActivePins(Resource):
             return activePins
 
         except Exception as e:
-            return "Error: " + str(e)
+            error = {}
+            error["message"] = str(e)
+            error["stack"] = "".join(traceback.format_exception(sys.exc_info()[0], sys.exc_info()[1], sys.exc_info()[2]))         
+            return error
 api.add_resource(ActivePins, '/ActivePins')
 
 #Sets the state of a given pin. If given "*" sets the state of all pins
@@ -168,18 +180,22 @@ class SetState(Resource):
                 return message
             else:
                 data = json.loads(data)
-                if (data["pin"] in ios):
-                    if ios[data["pin"]]["direction"] == "out":
-                        ios[data["pin"]]["interact"](data["pin"], gpioStates[data["state"]])
-                        ios[data["pin"]]["state"] = gpioStates[data["state"]]
+                pin = int(data["pin"])
+                if (pin in ios):
+                    if ios[pin]["direction"] == setDirections["out"]:
+                        ios[pin]["interact"](pin, gpioStates[data["state"]])
+                        ios[pin]["state"] = gpioStates[data["state"]]
                         return data["state"]
                     else:
-                        return "Error: Can't set state of pin " + data["pin"] + " because it is set to input"
+                        return "Error: Can't set state of pin " + str(pin) + " because it is set to input"
                 else:
-                    return "Error: Pin " + data["pin"] + " not initialized" 
+                    return "Error: Pin " + str(pin) + " not initialized" 
 
         except Exception as e:
-            return "Error: " + str(e)
+            error = {}
+            error["message"] = str(e)
+            error["stack"] = "".join(traceback.format_exception(sys.exc_info()[0], sys.exc_info()[1], sys.exc_info()[2]))         
+            return error
 api.add_resource(SetState, '/SetState')
 
 #Unexports all pins
@@ -191,7 +207,10 @@ class CleanExit(Resource):
             ios = {}
             return "Clean Exit"
         except Exception as e:
-            "Error: " + str(e)
+            error = {}
+            error["message"] = str(e)
+            error["stack"] = "".join(traceback.format_exception(sys.exc_info()[0], sys.exc_info()[1], sys.exc_info()[2]))         
+            return error
 api.add_resource(CleanExit, '/CleanExit')
 
 #Unexports a given pin
@@ -209,7 +228,10 @@ class Command(Resource):
             command = os.system(data)
             return command
         except Exception as e:
-            return "Error: " + str(e)
+            error = {}
+            error["message"] = str(e)
+            error["stack"] = "".join(traceback.format_exception(sys.exc_info()[0], sys.exc_info()[1], sys.exc_info()[2]))         
+            return error
 api.add_resource(Command, '/Command')
             
 if __name__ == "__main__":
