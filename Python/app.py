@@ -40,8 +40,7 @@ class GetSetting(Resource):
             error["message"] = str(e)
             error["stack"] = "".join(traceback.format_exception(sys.exc_info()[0], sys.exc_info()[1], sys.exc_info()[2]))         
             return error
-api.add_resource(GetSetting, '/GetSetting')
-    
+api.add_resource(GetSetting, '/GetSetting')    
 
 #Sets a setting and saves it to Settings.json
 class SetSetting(Resource):
@@ -88,14 +87,17 @@ class InitPin(Resource):
             if "pull" in data:
                 ios[pin]["pull"] = pull[data["pull"]]
             else:
-                ios[pin]["pull"] = pull[data["none"]] 
+                ios[pin]["pull"] = pull["none"] 
 
             if "state" in data:
                 ios[pin]["state"] = gpioStates[int(data["state"])]
             else:
                 ios[pin]["state"] = gpioStates[0]
-            
-            GPIO.setup(pin, ios[pin]["direction"], pull_up_down =ios[pin]["pull"], initial=ios[pin]["state"])
+
+            if ios[pin]["direction"] == GPIO.OUT:
+                GPIO.setup(pin, ios[pin]["direction"], pull_up_down = ios[pin]["pull"], initial=ios[pin]["state"])
+            else:
+                GPIO.setup(pin, ios[pin]["direction"], pull_up_down = ios[pin]["pull"])
 
             if "edge" in data:
                 GPIO.wait_for_edge(pin, edge[data["edge"]], timeout = ios[pin]["edgeTimeout"])
@@ -158,18 +160,18 @@ class SetState(Resource):
         data = request.get_data(as_text=True)
         print(data)
         try:
+            data = json.loads(data)
             if data["pin"] == "*":
-                data = json.loads(data)
                 pins = list(ios.keys())
                 message = {}
                 message["success"] = list()
                 message["failed"] = list()
 
                 for pin in pins:
-                    if ios[pin]["direction"] == setDirections["out"]:
+                    if ios[pin]["direction"] == GPIO.OUT:
                         try:
-                            ios[pin]["interact"](pin, gpioStates[data["state"]])
-                            ios[pin]["state"] = gpioStates[data["state"]]
+                            ios[pin]["interact"](pin, gpioStates[int(data["state"])])
+                            ios[pin]["state"] = gpioStates[int(data["state"])]
                             message["success"].append(pin)
                         except Exception as e:
                             fail = {}
@@ -179,17 +181,16 @@ class SetState(Resource):
                 
                 return message
             else:
-                data = json.loads(data)
                 pin = int(data["pin"])
                 if (pin in ios):
-                    if ios[pin]["direction"] == setDirections["out"]:
-                        ios[pin]["interact"](pin, gpioStates[data["state"]])
-                        ios[pin]["state"] = gpioStates[data["state"]]
+                    if ios[pin]["direction"] == GPIO.OUT:
+                        ios[pin]["interact"](pin, gpioStates[int(data["state"])])
+                        ios[pin]["state"] = gpioStates[int(data["state"])]
                         return data["state"]
                     else:
                         return "Error: Can't set state of pin " + str(pin) + " because it is set to input"
                 else:
-                    return "Error: Pin " + str(pin) + " not initialized" 
+                    return "Error: Pin " + str(pin) + " not initialized"
 
         except Exception as e:
             error = {}
