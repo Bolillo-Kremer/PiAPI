@@ -1,6 +1,7 @@
 import json
 import os
 import sys
+import traceback
 import RPi.GPIO as GPIO
 from flask import Flask, jsonify, request
 from flask_cors import CORS, cross_origin
@@ -63,40 +64,43 @@ class InitPin(Resource):
         print(data)
         try:
             data = json.loads(data)
-
-            ios[data["pin"]] = {}
-            ios[data["pin"]]["pin"] = data["pin"]
-            ios[data["pin"]]["direction"] = data["direction"]
-            ios[data["pin"]]["interact"] = stateFunctions[data["direction"]]
+            pin = int(data["pin"])
+            ios[pin] = {}
+            ios[pin]["pin"] = pin
+            ios[pin]["direction"] = setDirections[data["direction"]]
+            ios[pin]["interact"] = stateFunctions[data["direction"]]
             
             if "edge" in data:
-                ios[data["pin"]]["edge"] = edge[data["edge"]]
+                ios[pin]["edge"] = edge[data["edge"]]
                 if "edgeTimeout" in data:
-                    ios[data["pin"]]["edgeTimeout"] = int(data["edgeTimeout"])
+                    ios[pin]["edgeTimeout"] = int(data["edgeTimeout"])
                 else:
-                    ios[data["pin"]]["edgeTimeout"] = None
+                    ios[pin]["edgeTimeout"] = None
             else:
-                ios[data["pin"]]["edge"] = None
+                ios[pin]["edge"] = None
 
             if "pull" in data:
-                ios[data["pin"]]["pull"] = pull[data["pull"]]
+                ios[pin]["pull"] = pull[data["pull"]]
             else:
-                ios[data["pin"]]["pull"] = None   
+                ios[pin]["pull"] = None   
 
             if "state" in data:
-                ios[data["pin"]]["state"] = gpioStates[data["state"]]
+                ios[pin]["state"] = gpioStates[int(data["state"])]
             else:
-                ios[data["pin"]]["state"] = gpioStates[0]
+                ios[pin]["state"] = gpioStates[0]
             
-            GPIO.setup(data["pin"], setDirections[data["direction"]], pull_up_down = ios[data["pin"]]["pull"], initial=ios[data["pin"]]["state"])
+            GPIO.setup(pin, ios[pin]["direction"], initial=ios[pin]["state"])
 
             if "edge" in data:
-                GPIO.wait_for_edge(data["pin"], edge[data["edge"]], timeout = ios[data["pin"]]["edgeTimeout"])
+                GPIO.wait_for_edge(pin, edge[data["edge"]], timeout = ios[pin]["edgeTimeout"])
 
-            return "Initiated pin " + str(data["pin"])
+            return "Initiated pin " + str(pin)
 
         except Exception as e:
-            return "Error: " + str(e)
+            error = {}
+            error["stack"] = "".join(traceback.format_exception(sys.exc_info()[0], sys.exc_info()[1], sys.exc_info()[2]))
+            error["message"] = str(e)
+            return error
 api.add_resource(InitPin, '/InitPin')
 
 #Returns the state of a given pin. If given "*", returns JSON of all pin states
