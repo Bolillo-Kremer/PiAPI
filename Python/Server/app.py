@@ -197,7 +197,7 @@ class SetState(Resource):
                         else:
                             ios[pin]["interact"](pin, gpioStates[int(data["state"])])
                             ios[pin]["state"] = gpioStates[int(data["state"])]
-                        return data["state"]
+                        return ios[pin]["state"]
                     else:
                         return "Error: Can't set state of pin " + str(pin) + " because it is set to input"
                 else:
