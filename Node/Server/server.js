@@ -27,8 +27,12 @@ app.post('/GetSetting', (req, res) => {
         try {
             res.send(JSON.stringify(settings[setting]));
         }
-        catch (e) {
-            res.send(e.toString());
+        catch(e) {
+            let error = {
+                message: e.toString(),
+                stack: Error().stack
+            }
+            res.send(JSON.stringify(error));
         }
     })
 })
@@ -56,8 +60,12 @@ app.post('/SetSetting', (req, res) => {
                 res.send('Error: Data was not in JSON format and was expected to be');
             }
         }
-        catch (e) {
-            res.send(e.toString());
+        catch(e) {
+            let error = {
+                message: e.toString(),
+                stack: Error().stack
+            }
+            res.send(JSON.stringify(error));
         }
     })
 })
@@ -87,8 +95,12 @@ app.post('/GetState', (req, res) => {
                 }
             }          
         }
-        catch (e) {
-            res.send(e.toString());
+        catch(e) {
+            let error = {
+                message: e.toString(),
+                stack: Error().stack
+            }
+            res.send(JSON.stringify(error));
         }
     })
 })
@@ -106,8 +118,12 @@ app.get('/ActivePins', (req, res) => {
         }
         res.send(JSON.stringify(activePins));
     }
-    catch (e) {
-        res.send(e.toString());
+    catch(e) {
+        let error = {
+            message: e.toString(),
+            stack: Error().stack
+        }
+        res.send(JSON.stringify(error));
     }
 })
 
@@ -129,7 +145,7 @@ app.post('/SetState', (req, res) => {
                 for (pin of pins) {
                     if (ios[pin].direction == 'out') {
                         try {
-                            if (data.state == 'toggle') {
+                            if (Number(data.state) == -1) {
                                 ios[pin].pin.writeSync(ios[pin].pin.readSync() ^ 1);
                             }
                             else {
@@ -153,7 +169,7 @@ app.post('/SetState', (req, res) => {
                 try {
                     if (ios.hasOwnProperty(data.pin)) {
                         if (ios[data.pin].direction == 'out') {
-                            if (data.state == 'toggle') {
+                            if (Number(data.state) == -1) {
                                 ios[data.pin].pin.writeSync(ios[data.pin].pin.readSync() ^ 1);
                             }
                             else {
@@ -171,7 +187,11 @@ app.post('/SetState', (req, res) => {
                     }
                 }
                 catch(e) {
-                    res.send(e.toString());
+                    let error = {
+                        message: e.toString(),
+                        stack: Error().stack
+                    }
+                    res.send(JSON.stringify(error));
                 }
 
             }
@@ -180,8 +200,12 @@ app.post('/SetState', (req, res) => {
             res.send('Error: Data was not in JSON format and was expected to be');
         }
 	}
-	catch (e) {
-		res.send(e.toString());
+	catch(e) {
+		let error = {
+            message: e.toString(),
+            stack: Error().stack
+        }
+        res.send(JSON.stringify(error));
 	}
     })
 })
@@ -209,8 +233,12 @@ app.post('/InitPin', (req, res) => {
                 res.send('Error: Data was not in JSON format and was expected to be');
             }
         }
-        catch (e) {
-            res.send(e.toString());
+        catch(e) {
+            let error = {
+                message: e.toString(),
+                stack: Error().stack
+            }
+            res.send(JSON.stringify(error));
         }
     })
 })
@@ -228,8 +256,12 @@ app.get('/CleanExit', (req, res) => {
         }
         res.send('Clean Exit');
     }
-    catch (e) {
-        res.send(e.toString())
+    catch(e) {
+        let error = {
+            message: e.toString(),
+            stack: Error().stack
+        }
+        res.send(JSON.stringify(error));
     }
 })
 
@@ -245,8 +277,12 @@ app.post('/Unexport', (req, res) => {
             delete ios[pin];
             res.send(`Unexported pin ${pin}`);
         }
-        catch (e) {
-            res.send(e.toString());
+        catch(e) {
+            let error = {
+                message: e.toString(),
+                stack: Error().stack
+            }
+            res.send(JSON.stringify(error));
         }
     })
 })

@@ -124,7 +124,7 @@ class GetState(Resource):
                 pins = list(ios.keys())
                 for iopin in pins:
                     states[iopin] = ios[iopin]["state"]
-                return iopin
+                return states
             else:
                 if (int(pin) in ios):
                     return ios[int(pin)]["state"]
@@ -172,9 +172,14 @@ class SetState(Resource):
                 for pin in pins:
                     if ios[pin]["direction"] == GPIO.OUT:
                         try:
-                            ios[pin]["interact"](pin, gpioStates[int(data["state"])])
-                            ios[pin]["state"] = gpioStates[int(data["state"])]
-                            message["success"].append(pin)
+                            if int(data["state"]) == -1:
+                                ios[pin]["interact"](pin, not bool(gpioStates[int(data["state"])]))
+                                ios[pin]["state"] = int(not bool(gpioStates[int(data["state"])]))
+                                message["success"].append(pin)
+                            else:
+                                ios[pin]["interact"](pin, gpioStates[int(data["state"])])
+                                ios[pin]["state"] = gpioStates[int(data["state"])]
+                                message["success"].append(pin)
                         except Exception as e:
                             fail = {}
                             fail["pin"] = pin
@@ -186,8 +191,12 @@ class SetState(Resource):
                 pin = int(data["pin"])
                 if (pin in ios):
                     if ios[pin]["direction"] == GPIO.OUT:
-                        ios[pin]["interact"](pin, gpioStates[int(data["state"])])
-                        ios[pin]["state"] = gpioStates[int(data["state"])]
+                        if (int(data["state"]) == -1):
+                            ios[pin]["interact"](pin, not bool(gpioStates[int(data["state"])]))
+                            ios[pin]["state"] = int(not bool(gpioStates[int(data["state"])]))
+                        else:
+                            ios[pin]["interact"](pin, gpioStates[int(data["state"])])
+                            ios[pin]["state"] = gpioStates[int(data["state"])]
                         return data["state"]
                     else:
                         return "Error: Can't set state of pin " + str(pin) + " because it is set to input"
@@ -219,7 +228,7 @@ api.add_resource(CleanExit, '/CleanExit')
 #Unexports a given pin
 class Unexport(Resource):
     def get(self):
-        return "This function is currenty unavailable for the Python API. Please consider switching to the Node API"
+        return "This function is currenty unavailable for PiAPI Python. Please consider switching to the PiAPI Node"
 api.add_resource(Unexport, '/Unexport')
 
 #Executes a given terminal command
