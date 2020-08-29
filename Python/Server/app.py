@@ -173,8 +173,8 @@ class SetState(Resource):
                     if ios[pin]["direction"] == GPIO.OUT:
                         try:
                             if int(data["state"]) == -1:
-                                ios[pin]["interact"](pin, not bool(gpioStates[int(data["state"])]))
-                                ios[pin]["state"] = int(not bool(gpioStates[int(data["state"])]))
+                                ios[pin]["interact"](pin, not bool(ios[pin]["state"]))
+                                ios[pin]["state"] = int(not bool(ios[pin]["state"]))
                                 message["success"].append(pin)
                             else:
                                 ios[pin]["interact"](pin, gpioStates[int(data["state"])])
@@ -192,8 +192,8 @@ class SetState(Resource):
                 if (pin in ios):
                     if ios[pin]["direction"] == GPIO.OUT:
                         if (int(data["state"]) == -1):
-                            ios[pin]["interact"](pin, not bool(gpioStates[int(data["state"])]))
-                            ios[pin]["state"] = int(not bool(gpioStates[int(data["state"])]))
+                            ios[pin]["interact"](pin, not bool(ios[pin]["state"]))
+                            ios[pin]["state"] = int(not bool(ios[pin]["state"]))
                         else:
                             ios[pin]["interact"](pin, gpioStates[int(data["state"])])
                             ios[pin]["state"] = gpioStates[int(data["state"])]
