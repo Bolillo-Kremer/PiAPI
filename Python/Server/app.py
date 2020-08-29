@@ -7,6 +7,8 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS, cross_origin
 from flask_restful import Resource, Api
 
+path = os.path.abspath(os.path.dirname(sys.argv[0]))
+
 #Setting Up
 setDirections = {"in": GPIO.IN, "out": GPIO.OUT}
 stateFunctions = {"in": GPIO.input, "out": GPIO.output}
@@ -15,7 +17,7 @@ pull = {"up": GPIO.PUD_UP, "down": GPIO.PUD_DOWN, "none": GPIO.PUD_OFF}
 edge = {"rising": GPIO.RISING, "falling": GPIO.FALLING, "both": GPIO.BOTH }
 boardTypes = {"bcm": GPIO.BCM, "board": GPIO.BOARD}
 
-settings = json.load(open("Settings.json"))
+settings = json.load(open(path + "/Settings.json"))
 port = int(settings["port"])
 host = settings["host"]
 ios = {}
@@ -51,7 +53,7 @@ class SetSetting(Resource):
             data = json.loads(data)
             if (data["setting"] in settings):
                 settings[data["setting"]] = json.loads(data["val"])
-                json.dump(settings, open("Settings.json", "w"), indent=4)
+                json.dump(settings, open(path + "/Settings.json", "w"), indent=4)
                 return "Settings updated"
             else:
                 return "Setting name " + data["setting"] + "does not exist"
