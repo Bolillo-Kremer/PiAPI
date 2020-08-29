@@ -220,13 +220,22 @@ app.post('/InitPin', (req, res) => {
         try {
             if (isJSON(data)) {
                 data = JSON.parse(data);
-                ios[data.pin] = 
-                {
-                    pin: new gpio(Number(data.pin), data.direction, data.edge, data.options),
-                    direction: data.direction,
-                    edge: data.edge,
-                    options: data.options
+                
+                ios[data.pin].direction = data.direction;
+                if (data.hasOwnProperty('edge')){
+                    ios[data.pin].edge = data.edge;
+                    if (data.hasOwnProperty('edgeTimeout')) {
+                        ios[data.pin].options = { debounceTimeout: data.edgeTimeout };
+                    }
+                    else {
+                        ios[data.pin].options = null;
+                    }
                 }
+                else {
+                    ios[data.pin].edge = null;
+                } 
+
+                ios[data.pin].pin = new gpio(Number(data.pin), data.direction, ios[data.pin].edge, ios[data.pin].options);
                 res.send(ios[data.pin].pin.readSync().toString());
             }
             else {
