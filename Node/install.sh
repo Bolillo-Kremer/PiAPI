@@ -54,7 +54,7 @@ checkNodeAfterInstall(){
     else
         echo Node.js install failed. Is $(uname -m) the latest arm version?
         echo Please update your pi and try again or download Node.js manually from nodejs.org
-        echo "This install requires that you have the latest arm version."
+        echo "This PiAPI (Node) may be incompatible with your Pi. Please consider trying PiAPI (Python)."
         while true
             do
             read -r -p "Would you like to try again? [y/n] " input
@@ -79,23 +79,19 @@ checkNodeAfterInstall(){
 function installPiAPI() {
     echo Installing PiAPI
     cd /
-    sudo wget https://github.com/Bolillo-Kremer/PiAPI/archive/master.zip
-    unzip master.zip
-    sudo mv PiAPI-master PiAPI
-    cd PiAPI
-    sudo rm install.sh
-    cd Server
+    sudo mkdir PiAPI_Node
+    cd PiAPI_Node
+    sudo wget https://raw.githubusercontent.com/Bolillo-Kremer/PiAPI/master/Node/Server/server.js
+    sudo wget https://raw.githubusercontent.com/Bolillo-Kremer/PiAPI/master/Node/Server/package.json
+    sudo wget https://raw.githubusercontent.com/Bolillo-Kremer/PiAPI/master/Node/Server/Settings.json
     sudo npm install --save
-    echo Cleaning up...
-    cd /
-    sudo rm master.zip
     echo PiAPI Installed
 }
 
 function addToBoot() {
     echo "Adding to boot"
     cd /etc
-    sudo sed -i '$ a sudo node /PiAPI/Server/server.js' profile
+    sudo sed -i '$ a sudo node /PiAPI_Node/server.js' profile
     sudo sed -i '$ a clear' profile
 }
 
