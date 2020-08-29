@@ -5,7 +5,7 @@ function installPiAPI() {
     cd PiAPI_Python
     sudo wget https://raw.githubusercontent.com/Bolillo-Kremer/PiAPI/master/Python/Server/app.py
     sudo wget https://raw.githubusercontent.com/Bolillo-Kremer/PiAPI/master/Python/Server/Settings.json
-    pip install flask flask_cors flask_restful
+    sudo pip install flask flask_cors flask_restful
     echo PiAPI Installed
 }
 
