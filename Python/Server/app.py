@@ -104,7 +104,7 @@ class InitPin(Resource):
             if "edge" in data:
                 GPIO.wait_for_edge(pin, edge[data["edge"]], timeout = ios[pin]["edgeTimeout"])
 
-            return "Initiated pin " + str(pin)
+            return ios[pin]["state"]
 
         except Exception as e:
             error = {}
