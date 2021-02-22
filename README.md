@@ -2,7 +2,7 @@
 ##### [Bolillo Kremer](https://youtube.com/BolilloKremer?https://www.youtube.com/BolilloKremer?sub_confirmation=1)
 
 ## Overview
-PiAPI is a user friendly web server that runs on Python or [Node.js](https://nodejs.org) that allows you to interface with your raspberry pi's gpio pins from anywhere using virtually any language! This can be extremely useful to developers in many situations, but due to this application running off of a web server, using this application for percise timing may be an issue for some users.
+PiAPI is a user friendly web server that runs on Python or [Node.js](https://nodejs.org) that allows you to interface with your raspberry pi's gpio pins from anywhere using virtually any language! This can be extremely useful to developers looking to control multiple Pi's at once with just one application and for beginners looking to learn raspberry pi with any language.
 
 For updates on this project and other other entertainging coding projects, please subscribe to my YouTube channel, [Bolillo Kremer](https://youtube.com/BolilloKremer?https://www.youtube.com/BolilloKremer?sub_confirmation=1). 
 
@@ -36,9 +36,9 @@ Python API
 $ bash <(curl -s https://raw.githubusercontent.com/Bolillo-Kremer/PiAPI/master/Python/install.sh)
 ```
 
-#### Using PiAPI in other languages
-
-There is currently only one library available for .Net languages. You can view that project [here](https://github.com/Bolillo-Kremer/PiAPI.NET) or download the nuget package in visual studio using the following command in the package manager terminal.
-```
-PM Install-Package PiAPI
-```
+#### Available PiAPI Libraries
+- [PiAPI.NET](https://github.com/Bolillo-Kremer/PiAPI.NET)
+- [PiAPI Java](https://github.com/Bolillo-Kremer/PiAPI-Java)
+- PiAPI Python Client (In progress)
+- PiAPI JavaScript Client (In progress)
+- PiAPI C++ (In Progress)
