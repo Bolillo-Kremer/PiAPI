@@ -36,7 +36,7 @@ Python API
 $ bash <(curl -s https://raw.githubusercontent.com/Bolillo-Kremer/PiAPI/master/Python/install.sh)
 ```
 
-#### Available PiAPI Libraries
+#### Available PiAPI Client Libraries
 - [PiAPI.NET](https://github.com/Bolillo-Kremer/PiAPI.NET)
 - [PiAPI Java](https://github.com/Bolillo-Kremer/PiAPI-Java)
 - PiAPI Python Client (In progress)
