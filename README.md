@@ -24,9 +24,9 @@ For updates on this project and other other entertainging coding projects, pleas
 #### Installing PiAPI on your Raspberry Pi
 In your raspberry pi terminal, simply run the install script for the API version that you want!
 
-If [cURL](https://curl.haxx.se/) is already installed, you can skip the first command.
-
 (NOTE) Some pi's may have trouble downloading the Node API. If you are unsure if Node.js is compatible with your pi, choose the Python API.
+
+Most operating systems for the raspberry pi come with [cURL](https://curl.haxx.se/) already installed, but if it isn't you can install it with this command.
 
 Install cURL
 ```sh
