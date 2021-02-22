@@ -22,9 +22,6 @@ For updates on this project and other other entertainging coding projects, pleas
 
 ## How to use
 #### Installing PiAPI on your Raspberry Pi
-In your raspberry pi terminal, simply run the install script for the API version that you want!
-
-(NOTE) Some pi's may have trouble downloading the Node API. If you are unsure if Node.js is compatible with your pi, choose the Python API.
 
 Most operating systems for the raspberry pi come with [cURL](https://curl.haxx.se/) already installed, but if it isn't you can install it with this command.
 
@@ -32,15 +29,18 @@ Install cURL
 ```sh
 $ sudo apt-get install php-curl
 ```
+Now you're ready to install PiAPI! Simply choose if you want to run PiAPI on Node.js or Python and paste the corresponding command into your terminal.
 
-Node API
-```sh
-$ bash <(curl -s https://raw.githubusercontent.com/Bolillo-Kremer/PiAPI/master/Node/install.sh)
-```
+(NOTE) Some pi's may have trouble downloading the Node API. If you are unsure if Node.js is compatible with your pi, choose the Python API.
 
 Python API
 ```sh
 $ bash <(curl -s https://raw.githubusercontent.com/Bolillo-Kremer/PiAPI/master/Python/install.sh)
+```
+
+Node API
+```sh
+$ bash <(curl -s https://raw.githubusercontent.com/Bolillo-Kremer/PiAPI/master/Node/install.sh)
 ```
 
 #### Available PiAPI Client Libraries
