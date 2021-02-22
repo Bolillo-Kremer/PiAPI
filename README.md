@@ -2,7 +2,7 @@
 ##### [Bolillo Kremer](https://youtube.com/BolilloKremer?https://www.youtube.com/BolilloKremer?sub_confirmation=1)
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/Bolillo-Kremer/PiAPI/master/PiAPI.png" alt="PiAPI icon" width="250px" height="250px">
+  <img src="https://raw.githubusercontent.com/Bolillo-Kremer/PiAPI/master/PiAPI.png" alt="PiAPI icon" width="300px" height="300px">
 </div>
 
 ## Overview
