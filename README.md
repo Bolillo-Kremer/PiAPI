@@ -1,7 +1,7 @@
 # PiAPI
 ##### [Bolillo Kremer](https://youtube.com/BolilloKremer?https://www.youtube.com/BolilloKremer?sub_confirmation=1)
 
-![PiAPI icon](https://raw.githubusercontent.com/Bolillo-Kremer/PiAPI/master/PiAPI.png)
+![PiAPI icon](https://raw.githubusercontent.com/Bolillo-Kremer/PiAPI/master/PiAPI.png =250x250)
 
 ## Overview
 PiAPI is a user friendly web server that runs on Python or [Node.js](https://nodejs.org) that allows you to interface with your raspberry pi's gpio pins from anywhere using virtually any language! This can be extremely useful to developers looking to control multiple Pi's at once with just one application and for beginners looking to learn raspberry pi with any language.
