@@ -46,6 +46,6 @@ $ bash <(curl -s https://raw.githubusercontent.com/Bolillo-Kremer/PiAPI/master/N
 #### Available PiAPI Client Libraries
 - [PiAPI.NET](https://github.com/Bolillo-Kremer/PiAPI.NET)
 - [PiAPI Java](https://github.com/Bolillo-Kremer/PiAPI-Java)
-- PiAPI Python Client (In progress)
+- [PiAPI Python Client](https://github.com/Bolillo-Kremer/PiAPI-Python_Client)
 - PiAPI JavaScript Client (In progress)
 - PiAPI C++ (In Progress)
