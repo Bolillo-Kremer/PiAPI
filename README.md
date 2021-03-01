@@ -71,5 +71,5 @@ Choose whether or not to run in debug mode
 - [PiAPI.NET](https://github.com/Bolillo-Kremer/PiAPI.NET)
 - [PiAPI Java](https://github.com/Bolillo-Kremer/PiAPI-Java)
 - [PiAPI Python Client](https://github.com/Bolillo-Kremer/PiAPI-Python_Client)
-- PiAPI JavaScript Client (In progress)
+- [PiAPI JavaScript Client](https://github.com/Bolillo-Kremer/PiAPI-NPM)
 - PiAPI C++ (In Progress)
