@@ -68,6 +68,42 @@ class SetSetting(Resource):
             return error
 api.add_resource(SetSetting, '/SetSetting')
 
+def init_pin(data):
+    pin = int(data["pin"])
+    ios[pin] = {}
+    ios[pin]["pin"] = pin
+    ios[pin]["direction"] = setDirections[data["direction"]]
+    ios[pin]["interact"] = stateFunctions[data["direction"]]
+    
+    if "edge" in data:
+        ios[pin]["edge"] = edge[data["edge"]]
+        if "edgeTimeout" in data:
+            ios[pin]["edgeTimeout"] = int(data["edgeTimeout"])
+        else:
+            ios[pin]["edgeTimeout"] = None
+    else:
+        ios[pin]["edge"] = None
+
+    if "pull" in data:
+        ios[pin]["pull"] = pull[data["pull"]]
+    else:
+        ios[pin]["pull"] = pull["none"] 
+
+    if "state" in data:
+        ios[pin]["state"] = gpioStates[int(data["state"])]
+    else:
+        ios[pin]["state"] = gpioStates[0]
+
+    if ios[pin]["direction"] == GPIO.OUT:
+        GPIO.setup(pin, ios[pin]["direction"], pull_up_down = ios[pin]["pull"], initial=ios[pin]["state"])
+    else:
+        GPIO.setup(pin, ios[pin]["direction"], pull_up_down = ios[pin]["pull"])
+
+    if "edge" in data:
+        GPIO.wait_for_edge(pin, edge[data["edge"]], timeout = ios[pin]["edgeTimeout"])
+
+    return pin
+
 #Imports a given pin
 class InitPin(Resource):
     def post(self):
@@ -75,7 +111,7 @@ class InitPin(Resource):
         print(data)
         try:
             data = json.loads(data)
-            pin = self.init_pin(data)
+            pin = init_pin(data)
             return ios[pin]["state"]
 
         except Exception as e:
@@ -83,43 +119,6 @@ class InitPin(Resource):
             error["message"] = str(e)
             error["stack"] = "".join(traceback.format_exception(sys.exc_info()[0], sys.exc_info()[1], sys.exc_info()[2]))         
             return error
-
-    @staticmethod
-    def init_pin(data):
-        pin = int(data["pin"])
-        ios[pin] = {}
-        ios[pin]["pin"] = pin
-        ios[pin]["direction"] = setDirections[data["direction"]]
-        ios[pin]["interact"] = stateFunctions[data["direction"]]
-        
-        if "edge" in data:
-            ios[pin]["edge"] = edge[data["edge"]]
-            if "edgeTimeout" in data:
-                ios[pin]["edgeTimeout"] = int(data["edgeTimeout"])
-            else:
-                ios[pin]["edgeTimeout"] = None
-        else:
-            ios[pin]["edge"] = None
-
-        if "pull" in data:
-            ios[pin]["pull"] = pull[data["pull"]]
-        else:
-            ios[pin]["pull"] = pull["none"] 
-
-        if "state" in data:
-            ios[pin]["state"] = gpioStates[int(data["state"])]
-        else:
-            ios[pin]["state"] = gpioStates[0]
-
-        if ios[pin]["direction"] == GPIO.OUT:
-            GPIO.setup(pin, ios[pin]["direction"], pull_up_down = ios[pin]["pull"], initial=ios[pin]["state"])
-        else:
-            GPIO.setup(pin, ios[pin]["direction"], pull_up_down = ios[pin]["pull"])
-
-        if "edge" in data:
-            GPIO.wait_for_edge(pin, edge[data["edge"]], timeout = ios[pin]["edgeTimeout"])
-
-        return pin
 
 
 api.add_resource(InitPin, '/InitPin')
