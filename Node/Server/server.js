@@ -17,6 +17,11 @@ const server = http.createServer(app);
 
 const ios = {};
 
+//Initiates default pins
+for (pinData of settings['defaultPins']) {
+    initPin(pinData);
+}
+
 /**
  * Gets a setting from the setting json
  */
@@ -210,6 +215,26 @@ app.post('/SetState', (req, res) => {
     })
 })
 
+function initPin(data) {
+    ios[data.pin].direction = data.direction;
+        if (data.hasOwnProperty('edge')){
+            ios[data.pin].edge = data.edge;
+            if (data.hasOwnProperty('edgeTimeout')) {
+                ios[data.pin].options = { debounceTimeout: data.edgeTimeout };
+            }
+            else {
+                ios[data.pin].options = null;
+            }
+        }
+        else {
+            ios[data.pin].edge = null;
+        } 
+
+    ios[data.pin].pin = new gpio(Number(data.pin), data.direction, ios[data.pin].edge, ios[data.pin].options);
+
+    return data.pin;
+}
+
 /**
  * Imports a given pin
  */
@@ -220,22 +245,7 @@ app.post('/InitPin', (req, res) => {
         try {
             if (isJSON(data)) {
                 data = JSON.parse(data);
-                
-                ios[data.pin].direction = data.direction;
-                if (data.hasOwnProperty('edge')){
-                    ios[data.pin].edge = data.edge;
-                    if (data.hasOwnProperty('edgeTimeout')) {
-                        ios[data.pin].options = { debounceTimeout: data.edgeTimeout };
-                    }
-                    else {
-                        ios[data.pin].options = null;
-                    }
-                }
-                else {
-                    ios[data.pin].edge = null;
-                } 
-
-                ios[data.pin].pin = new gpio(Number(data.pin), data.direction, ios[data.pin].edge, ios[data.pin].options);
+                initPin(data)
                 res.send(ios[data.pin].pin.readSync().toString());
             }
             else {
