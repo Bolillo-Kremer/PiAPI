@@ -52,11 +52,11 @@ The port that PiAPI will run on
 ### mode
 The pin mode of the raspberry pi (Python API only)
 
-### defaultPins
-This setting is an array of pin objects that PiAPI will initialize on boot. They can be set up just like how you would initialize a pin.
-
 ### debug
 Choose whether or not to run in debug mode
+
+### defaultPins
+This setting is an array of pin objects that PiAPI will initialize on boot. They can be set up just like how you would initialize a pin.
 
 ```json
 {
