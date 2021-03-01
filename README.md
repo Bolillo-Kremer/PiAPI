@@ -60,7 +60,7 @@ Choose whether or not to run in debug mode
 
 ```json
 {
-  defautPins: [
+  "defaultPins": [
     {"pin": 1, "direction": "out"},
     {"pin": 2, "direction": "in", "edge": "falling"}
   ]
