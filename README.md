@@ -43,6 +43,30 @@ Node API
 $ bash <(curl -s https://raw.githubusercontent.com/Bolillo-Kremer/PiAPI/master/Node/install.sh)
 ```
 
+## Settings
+You can change certain API settings from the Settings.json in the server directory of PiAPI
+
+### port
+The port that PiAPI will run on
+
+### mode
+The pin mode of the raspberry pi (Python API only)
+
+### defaultPins
+This setting is an array of pin objects that PiAPI will initialize on boot. They can be set up just like how you would initialize a pin.
+
+### debug
+Choose whether or not to run in debug mode
+
+```json
+{
+  defautPins: [
+    {"pin": 1, "direction": "out"},
+    {"pin": 2, "direction": "in", "edge": "falling"}
+  ]
+}
+```
+
 #### Available PiAPI Client Libraries
 - [PiAPI.NET](https://github.com/Bolillo-Kremer/PiAPI.NET)
 - [PiAPI Java](https://github.com/Bolillo-Kremer/PiAPI-Java)
