@@ -24,7 +24,7 @@ ios = {}
 
 #Initiates default pins. 
 for pinData in settings['defaultPins']:
-    InitPin.init_pin(pinData)
+    init_pin(pinData)
 
 GPIO.setmode(boardTypes[settings["mode"]])
 
